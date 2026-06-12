@@ -24,10 +24,11 @@
   </div>
   <img class="logo" src="https://dl.dropboxusercontent.com/scl/fi/01c69m4yq84t2muelgr3x/text-logo.png?rlkey=0prbj2w1xamwzo29ax9mh2pyt" alt="Ky Vöss text logo" />
   <a class="download" href="https://kyvoss.bandcamp.com" target="_blank" rel="noopener noreferrer">DOWNLOAD</a>
-  <a class="shop" href="/shop">SHOP</a>
+  <a class="shop" id="shop-link" href="#" aria-expanded="false">SHOP</a>
   <img class="image-logo" src="https://dl.dropboxusercontent.com/scl/fi/p5csb10vnlafmponv9lyp/image-logo.png?rlkey=0biapr4baid01x04as8fe1hyv" alt="Ky Vöss image logo" />
   <a class="events" id="events-link" href="#" aria-expanded="false">EVENTS</a>
   <div id="events-menu" class="embed-menu" aria-hidden="true"></div>
+  <div id="shop-menu" class="embed-menu" aria-hidden="true"></div>
 </div>
 
 <script>
@@ -178,6 +179,56 @@
       }
     });
   })();
+
+    // SHOP overlay toggle — inject provided Shopify collection embed
+    (function(){
+      const shopLink = document.getElementById('shop-link');
+      const shopMenu = document.getElementById('shop-menu');
+      const shopEmbedDiv = '<div id="collection-component-1781278280386"></div>';
+      const shopEmbedScript = `\n<div id='collection-component-1781278280386'></div>\n<script type="text/javascript">\n/*<![CDATA[*/\n(function () {\n  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';\n  if (window.ShopifyBuy) {\n    if (window.ShopifyBuy.UI) {\n      ShopifyBuyInit();\n    } else {\n      loadScript();\n    }\n  } else {\n    loadScript();\n  }\n  function loadScript() {\n    var script = document.createElement('script');\n    script.async = true;\n    script.src = scriptURL;\n    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);\n    script.onload = ShopifyBuyInit;\n  }\n  function ShopifyBuyInit() {\n    var client = ShopifyBuy.buildClient({\n      domain: '50ymxy-g0.myshopify.com',\n      storefrontAccessToken: 'e94110971243bddedde324bf2e3954a2',\n    });\n    ShopifyBuy.UI.onReady(client).then(function (ui) {\n      ui.createComponent('collection', {\n        id: '341685207234',\n        node: document.getElementById('collection-component-1781278280386'),\n        moneyFormat: '%24%7B%7Bamount%7D%7D',\n        options: {/* trimmed for brevity */}\n      });\n    });\n  }\n})();\n/*]]>*/\n<\/script>`;
+
+      function toggleShop(e){
+        e.preventDefault();
+        const shown = shopMenu.classList.toggle('visible');
+        shopMenu.setAttribute('aria-hidden', !shown);
+        shopLink.setAttribute('aria-expanded', shown);
+        if(shown){
+          if(!shopMenu.dataset.loaded){
+            shopMenu.innerHTML = shopEmbedDiv;
+            // append the long script as a single node to avoid inline parser issues
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.text = "(function(){var scriptURL='https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';if(window.ShopifyBuy){if(window.ShopifyBuy.UI){ShopifyBuyInit();}else{loadScript();}}else{loadScript();}function loadScript(){var script=document.createElement('script');script.async=true;script.src=scriptURL;(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(script);script.onload=ShopifyBuyInit;}function ShopifyBuyInit(){var client=ShopifyBuy.buildClient({domain:'50ymxy-g0.myshopify.com',storefrontAccessToken:'e94110971243bddedde324bf2e3954a2',});ShopifyBuy.UI.onReady(client).then(function(ui){ui.createComponent('collection',{id:'341685207234',node:document.getElementById('collection-component-1781278280386'),moneyFormat:'%24%7B%7Bamount%7D%7D',options:{}});});}})();";
+            shopMenu.appendChild(s);
+            shopMenu.dataset.loaded = '1';
+          }
+          const linkRect = shopLink.getBoundingClientRect();
+          const landingRect = landing.getBoundingClientRect();
+          const top = linkRect.bottom - landingRect.top + 12;
+          shopMenu.style.position = 'absolute';
+          shopMenu.style.left = '50%';
+          shopMenu.style.transform = 'translateX(-50%)';
+          shopMenu.style.top = top + 'px';
+        } else {
+          shopMenu.style.left = '';
+          shopMenu.style.top = '';
+          shopMenu.style.position = '';
+          shopMenu.style.transform = '';
+        }
+      }
+
+      shopLink.addEventListener('click', toggleShop);
+      document.addEventListener('click', function(e){
+        if(!shopMenu.contains(e.target) && e.target !== shopLink){
+          shopMenu.classList.remove('visible');
+          shopMenu.setAttribute('aria-hidden','true');
+          shopMenu.style.left = '';
+          shopMenu.style.top = '';
+          shopMenu.style.position = '';
+          shopMenu.style.transform = '';
+        }
+      });
+    })();
 
 })();
 </script>
