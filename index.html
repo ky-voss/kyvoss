@@ -135,13 +135,14 @@
     const eventsLink = document.getElementById('events-link');
     const eventsMenu = document.getElementById('events-menu');
     const embedAnchor = '<a href="https://www.songkick.com/artists/10068547" class="songkick-widget" data-theme="dark" data-track-button="on" data-detect-style="on" data-locale="en" data-other-artists="on" data-share-button="on" data-country-filter="on" data-rsvp="on" data-request-show="on" data-past-events="on" data-past-events-offtour="on" data-remind-me="off" style="display: none;"></a>';
-    let eventsObserver = null;
+
     function toggleEvents(e){
       e.preventDefault();
       const shown = eventsMenu.classList.toggle('visible');
       eventsMenu.setAttribute('aria-hidden', !shown);
       eventsLink.setAttribute('aria-expanded', shown);
       if(shown){
+        // insert embed once
         if(!eventsMenu.dataset.loaded){
           eventsMenu.innerHTML = embedAnchor;
           const s = document.createElement('script');
@@ -149,6 +150,7 @@
           eventsMenu.appendChild(s);
           eventsMenu.dataset.loaded = '1';
         }
+        // position overlay; do NOT shift other page links (no landing.classList changes)
         const linkRect = eventsLink.getBoundingClientRect();
         const landingRect = landing.getBoundingClientRect();
         const top = linkRect.bottom - landingRect.top + 12;
@@ -156,40 +158,23 @@
         eventsMenu.style.left = '50%';
         eventsMenu.style.transform = 'translateX(-50%)';
         eventsMenu.style.top = top + 'px';
-        const extraBelow = 12;
-        if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
-        eventsObserver = new ResizeObserver(function(){
-          const h = eventsMenu.getBoundingClientRect().height;
-          const total = h + extraBelow;
-          landing.style.setProperty('--stream-shift', total + 'px');
-          setEmbedSpacer(total);
-          landing.classList.add('shifted');
-        });
-        requestAnimationFrame(function(){ eventsObserver.observe(eventsMenu); });
       } else {
-        landing.classList.remove('shifted');
-        landing.style.removeProperty('--stream-shift');
         eventsMenu.style.left = '';
         eventsMenu.style.top = '';
         eventsMenu.style.position = '';
         eventsMenu.style.transform = '';
-        if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
-        removeEmbedSpacer();
       }
     }
+
     eventsLink.addEventListener('click', toggleEvents);
     document.addEventListener('click', function(e){
       if(!eventsMenu.contains(e.target) && e.target !== eventsLink){
         eventsMenu.classList.remove('visible');
         eventsMenu.setAttribute('aria-hidden','true');
-        landing.classList.remove('shifted');
-        landing.style.removeProperty('--stream-shift');
         eventsMenu.style.left = '';
         eventsMenu.style.top = '';
         eventsMenu.style.position = '';
         eventsMenu.style.transform = '';
-        if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
-        removeEmbedSpacer();
       }
     });
   })();
