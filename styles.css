@@ -114,10 +114,16 @@
    The previous broad selector could move elements offscreen; keep layout stable. */
 
 /* Shift the following links downward when the stream/events embed is shown. */
-.landing-page.shifted .download,
-.landing-page.shifted .shop,
+.landing-page.shifted .download {
+  transform: translateX(-50%) translateY(calc(var(--stream-shift) / 3));
+  transition: transform 180ms ease;
+}
+.landing-page.shifted .shop {
+  transform: translateX(-50%) translateY(calc(var(--stream-shift) * 2 / 3));
+  transition: transform 180ms ease;
+}
 .landing-page.shifted .events {
-  transform: translateY(var(--stream-shift));
+  transform: translateX(-50%) translateY(var(--stream-shift));
   transition: transform 180ms ease;
 }
 
