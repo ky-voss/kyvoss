@@ -19,220 +19,230 @@
   name="view-transition"
   content="same-origin"
 >
-<meta
-  name="theme-color"
-  content=""
->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="https://dl.dropboxusercontent.com/scl/fi/p5csb10vnlafmponv9lyp/image-logo.png?rlkey=0biapr4baid01x04as8fe1hyv">
+  <link rel="stylesheet" href="styles.css">
 
-<meta
-  property="og:site_name"
-  content="Ky Vöss"
->
-<meta
-  property="og:url"
-  content="https://kyvoss.com/"
->
-<meta
-  property="og:title"
-  content="Ky Vöss"
->
-<meta
-  property="og:type"
-  content="website"
->
-<meta
-  property="og:description"
-  content="Ky Vöss is a music producer and performing artist based out of Brooklyn, NY."
->
+  <meta property="og:site_name" content="Ky Vöss">
+  <meta property="og:url" content="https://kyvoss.com/">
+  <meta property="og:title" content="Ky Vöss">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Ky Vöss is a music producer and performing artist based out of Brooklyn, NY.">
 
-<title>
-  Ky Vöss
-</title>
-
-  </head>
-
-
+  <title>Ky Vöss</title>
+</head>
 <body>
 
 <div class="landing-page">
-  <a class="stream" id="stream-link" href="#">STREAM</a>
+  <a class="stream" id="stream-link" href="#" aria-expanded="false">STREAM</a>
   <div id="stream-menu" class="link-menu" aria-hidden="true">
-    <p class="menu-note">No links yet — provide a list and I'll populate this menu.</p>
-  </div>
-  <img class="logo" src="https://dl.dropboxusercontent.com/scl/fi/01c69m4yq84t2muelgr3x/text-logo.png?rlkey=0prbj2w1xamwzo29ax9mh2pyt" />
-  <a class="download"href="https://kyvoss.bandcamp.com">DOWNLOAD</a>
-  <a class="shop-vinyl"href="https://kyvoss.bandcamp.com/merch">SHOP VINYL</a>
-  <img class="image-logo" src="https://dl.dropboxusercontent.com/scl/fi/p5csb10vnlafmponv9lyp/image-logo.png?rlkey=0biapr4baid01x04as8fe1hyv"/>
-  <a class="events" id="events-link" href="#">EVENTS</a>
-  <div id="events-menu" class="embed-menu" aria-hidden="true"></div>
-</div>
-<script>
-(function(){
-  const linkEl = document.getElementById('stream-link');
-  const menu = document.getElementById('stream-menu');
-  function toggleMenu(e){
-    e.preventDefault();
-    const shown = menu.classList.toggle('visible');
-    menu.setAttribute('aria-hidden', !shown);
-    // position menu directly beneath the STREAM link and shift other content
-    const landing = document.querySelector('.landing-page');
-  let embedSpacer = null;
-  function setEmbedSpacer(h){
-    if(!embedSpacer){
-      embedSpacer = document.createElement('div');
-      embedSpacer.id = 'embed-spacer';
-      embedSpacer.style.width = '100%';
-      embedSpacer.style.transition = 'height 180ms ease';
-      landing.appendChild(embedSpacer);
-    }
-    embedSpacer.style.height = (h || 0) + 'px';
-  }
-  function removeEmbedSpacer(){
-    if(embedSpacer){
-      embedSpacer.remove();
-      embedSpacer = null;
-    }
-  }
-    if(shown){
-      // compute coords relative to landing container
-      const streamRect = linkEl.getBoundingClientRect();
-      const landingRect = landing.getBoundingClientRect();
-      const gap = 1; // pixels space between STREAM and links
-      const top = streamRect.bottom - landingRect.top + gap;
-      // center menu horizontally in the viewer
-      menu.style.position = 'absolute';
-      menu.style.left = '50%';
-      menu.style.transform = 'translateX(-50%)';
-      menu.style.top = top + 'px';
-      // ensure menu is rendered to measure height
-      requestAnimationFrame(function(){
-        const h = menu.getBoundingClientRect().height;
-        const extraBelow = 10; // extra space below links to match page spacing
-        const total = h + gap + extraBelow;
-        landing.style.setProperty('--stream-shift', total + 'px');
-        setEmbedSpacer(total);
-        landing.classList.add('shifted');
-      });
-    } else {
-      landing.classList.remove('shifted');
-      landing.style.removeProperty('--stream-shift');
-      menu.style.left = '';
-      menu.style.top = '';
-      menu.style.position = '';
-      menu.style.transform = '';
-      removeEmbedSpacer();
-    }
-  }
-  linkEl.addEventListener('click', toggleMenu);
-  document.addEventListener('click', function(e){
-    if(!menu.contains(e.target) && e.target !== linkEl){
-      const landing = document.querySelector('.landing-page');
-      menu.classList.remove('visible');
-      menu.setAttribute('aria-hidden','true');
-      landing.classList.remove('shifted');
-      landing.style.removeProperty('--stream-shift');
-      menu.style.left = '';
-      menu.style.top = '';
-      menu.style.position = '';
-      menu.style.transform = '';
-      removeEmbedSpacer();
-    }
-  });
-  window.populateStreamMenu = function(links){
-    menu.innerHTML = '';
-    if(!links || links.length===0){
-      menu.innerHTML = '<p class="menu-note">No links provided.</p>';
-      return;
-    }
-    var ul = document.createElement('ul');
-    links.forEach(function(l){
-      var li = document.createElement('li');
-      var a = document.createElement('a');
-      a.href = l.href || '#';
-      a.textContent = l.label || l.href;
-      a.target = '_blank';
-      li.appendChild(a);
-      ul.appendChild(li);
-    });
-    menu.appendChild(ul);
-  };
-})();
-// populate with provided streaming links
-window.populateStreamMenu([
-  { label: 'spotify', href: 'https://open.spotify.com/artist/3gUweQesKcu3vGilhPVviC?si=jfuB62rzT5WX5Zc_sOECBQ&nd=1&dlsi=3b14caa48d7846f2' },
-  { label: 'apple', href: 'https://music.apple.com/us/artist/ky-v%C3%B6ss/1463069867' },
-  { label: 'tidal', href: 'https://tidal.com/browse/artist/15734697' },
-  { label: 'soundcloud', href: 'https://soundcloud.com/ky-voss' },
-  { label: 'youtube', href: 'https://www.youtube.com/kyvoss' }
-]);
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="icon" type="image/x-icon" href="https://dl.dropboxusercontent.com/scl/fi/p5csb10vnlafmponv9lyp/image-logo.png?rlkey=0biapr4baid01x04as8fe1hyv">
+      <link rel="stylesheet" href="styles.css">
 
-  // EVENTS embed toggle
-  (function(){
-    const eventsLink = document.getElementById('events-link');
-    const eventsMenu = document.getElementById('events-menu');
-    const embedAnchor = '<a href="https://www.songkick.com/artists/10068547" class="songkick-widget" data-theme="dark" data-track-button="on" data-detect-style="on" data-locale="en" data-other-artists="on" data-share-button="on" data-country-filter="on" data-rsvp="on" data-request-show="on" data-past-events="on" data-past-events-offtour="on" data-remind-me="off" style="display: none;"></a>';
-    let eventsObserver = null;
-    function toggleEvents(e){
-      e.preventDefault();
-      const shown = eventsMenu.classList.toggle('visible');
-      eventsMenu.setAttribute('aria-hidden', !shown);
-      const landing = document.querySelector('.landing-page');
-      if(shown){
-        // insert embed once
-        if(!eventsMenu.dataset.loaded){
-          eventsMenu.innerHTML = embedAnchor;
-          const s = document.createElement('script');
-          s.src = '//widget-app.songkick.com/injector/10068547';
-          eventsMenu.appendChild(s);
-          eventsMenu.dataset.loaded = '1';
-        }
-        const linkRect = eventsLink.getBoundingClientRect();
-        const landingRect = landing.getBoundingClientRect();
-        const top = linkRect.bottom - landingRect.top + 12;
-        eventsMenu.style.position = 'absolute';
-        eventsMenu.style.left = '50%';
-        eventsMenu.style.transform = 'translateX(-50%)';
-        eventsMenu.style.top = top + 'px';
-        // Use ResizeObserver to follow embed height changes and expand page fully
-        const extraBelow = 12;
-        if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
-        eventsObserver = new ResizeObserver(function(){
-          const h = eventsMenu.getBoundingClientRect().height;
-          const total = h + extraBelow;
-          landing.style.setProperty('--stream-shift', total + 'px');
-          setEmbedSpacer(total);
-          landing.classList.add('shifted');
-        });
-        // observe after a frame so embed has started rendering
-        requestAnimationFrame(function(){ eventsObserver.observe(eventsMenu); });
-      } else {
-        landing.classList.remove('shifted');
-        landing.style.removeProperty('--stream-shift');
-        eventsMenu.style.left = '';
-        eventsMenu.style.top = '';
-        eventsMenu.style.position = '';
-        eventsMenu.style.transform = '';
-        if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
-        removeEmbedSpacer();
-      }
-    }
-    eventsLink.addEventListener('click', toggleEvents);
-    document.addEventListener('click', function(e){
-      if(!eventsMenu.contains(e.target) && e.target !== eventsLink){
-        eventsMenu.classList.remove('visible');
-        eventsMenu.setAttribute('aria-hidden','true');
+      <meta property="og:site_name" content="Ky Vöss">
+      <meta property="og:url" content="https://kyvoss.com/">
+      <meta property="og:title" content="Ky Vöss">
+      <meta property="og:type" content="website">
+      <meta property="og:description" content="Ky Vöss is a music producer and performing artist based out of Brooklyn, NY.">
+
+      <title>Ky Vöss</title>
+    </head>
+    <body>
+
+    <div class="landing-page">
+      <a class="stream" id="stream-link" href="#" aria-expanded="false">STREAM</a>
+      <div id="stream-menu" class="link-menu" aria-hidden="true">
+        <p class="menu-note">No links yet — provide a list and I'll populate this menu.</p>
+      </div>
+      <img class="logo" src="https://dl.dropboxusercontent.com/scl/fi/01c69m4yq84t2muelgr3x/text-logo.png?rlkey=0prbj2w1xamwzo29ax9mh2pyt" alt="Ky Vöss text logo" />
+      <a class="download" href="https://kyvoss.bandcamp.com" target="_blank" rel="noopener noreferrer">DOWNLOAD</a>
+      <a class="shop" href="/shop">SHOP</a>
+      <img class="image-logo" src="https://dl.dropboxusercontent.com/scl/fi/p5csb10vnlafmponv9lyp/image-logo.png?rlkey=0biapr4baid01x04as8fe1hyv" alt="Ky Vöss image logo" />
+      <a class="events" id="events-link" href="#" aria-expanded="false">EVENTS</a>
+      <div id="events-menu" class="embed-menu" aria-hidden="true"></div>
+    </div>
+    <script>
+    (function(){
+      const linkEl = document.getElementById('stream-link');
+      const menu = document.getElementById('stream-menu');
+      function toggleMenu(e){
+        e.preventDefault();
+        const shown = menu.classList.toggle('visible');
+        menu.setAttribute('aria-hidden', !shown);
+        linkEl.setAttribute('aria-expanded', shown);
+        // position menu directly beneath the STREAM link and shift other content
         const landing = document.querySelector('.landing-page');
-        landing.classList.remove('shifted');
-        landing.style.removeProperty('--stream-shift');
-        eventsMenu.style.left = '';
-        eventsMenu.style.top = '';
-        eventsMenu.style.position = '';
-        eventsMenu.style.transform = '';
-        if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
-        removeEmbedSpacer();
+        let embedSpacer = null;
+        function setEmbedSpacer(h){
+          if(!embedSpacer){
+            embedSpacer = document.createElement('div');
+            embedSpacer.id = 'embed-spacer';
+            embedSpacer.style.width = '100%';
+            embedSpacer.style.transition = 'height 180ms ease';
+            landing.appendChild(embedSpacer);
+          }
+          embedSpacer.style.height = (h || 0) + 'px';
+        }
+        function removeEmbedSpacer(){
+          if(embedSpacer){
+            embedSpacer.remove();
+            embedSpacer = null;
+          }
+        }
+        if(shown){
+          // compute coords relative to landing container
+          const streamRect = linkEl.getBoundingClientRect();
+          const landingRect = landing.getBoundingClientRect();
+          const gap = 1; // pixels space between STREAM and links
+          const top = streamRect.bottom - landingRect.top + gap;
+          // center menu horizontally in the viewer
+          menu.style.position = 'absolute';
+          menu.style.left = '50%';
+          menu.style.transform = 'translateX(-50%)';
+          menu.style.top = top + 'px';
+          // ensure menu is rendered to measure height
+          requestAnimationFrame(function(){
+            const h = menu.getBoundingClientRect().height;
+            const extraBelow = 10; // extra space below links to match page spacing
+            const total = h + gap + extraBelow;
+            landing.style.setProperty('--stream-shift', total + 'px');
+            setEmbedSpacer(total);
+            landing.classList.add('shifted');
+          });
+        } else {
+          landing.classList.remove('shifted');
+          landing.style.removeProperty('--stream-shift');
+          menu.style.left = '';
+          menu.style.top = '';
+          menu.style.position = '';
+          menu.style.transform = '';
+          removeEmbedSpacer();
+        }
       }
-    });
-  })();
-</script>
-</body>
+      linkEl.addEventListener('click', toggleMenu);
+      document.addEventListener('click', function(e){
+        if(!menu.contains(e.target) && e.target !== linkEl){
+          const landing = document.querySelector('.landing-page');
+          menu.classList.remove('visible');
+          menu.setAttribute('aria-hidden','true');
+          linkEl.setAttribute('aria-expanded', false);
+          landing.classList.remove('shifted');
+          landing.style.removeProperty('--stream-shift');
+          menu.style.left = '';
+          menu.style.top = '';
+          menu.style.position = '';
+          menu.style.transform = '';
+          removeEmbedSpacer();
+        }
+      });
+      window.populateStreamMenu = function(links){
+        menu.innerHTML = '';
+        if(!links || links.length===0){
+          menu.innerHTML = '<p class="menu-note">No links provided.</p>';
+          return;
+        }
+        var ul = document.createElement('ul');
+        links.forEach(function(l){
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.href = l.href || '#';
+          a.textContent = l.label || l.href;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+        menu.appendChild(ul);
+      };
+    })();
+    // populate with provided streaming links
+    window.populateStreamMenu([
+      { label: 'spotify', href: 'https://open.spotify.com/artist/3gUweQesKcu3vGilhPVviC?si=jfuB62rzT5WX5Zc_sOECBQ&nd=1&dlsi=3b14caa48d7846f2' },
+      { label: 'apple', href: 'https://music.apple.com/us/artist/ky-v%C3%B6ss/1463069867' },
+      { label: 'tidal', href: 'https://tidal.com/browse/artist/15734697' },
+      { label: 'soundcloud', href: 'https://soundcloud.com/ky-voss' },
+      { label: 'youtube', href: 'https://www.youtube.com/kyvoss' }
+    ]);
 
+      // EVENTS embed toggle
+      (function(){
+        const eventsLink = document.getElementById('events-link');
+        const eventsMenu = document.getElementById('events-menu');
+        const embedAnchor = '<a href="https://www.songkick.com/artists/10068547" class="songkick-widget" data-theme="dark" data-track-button="on" data-detect-style="on" data-locale="en" data-other-artists="on" data-share-button="on" data-country-filter="on" data-rsvp="on" data-request-show="on" data-past-events="on" data-past-events-offtour="on" data-remind-me="off" style="display: none;"></a>';
+        let eventsObserver = null;
+        function toggleEvents(e){
+          e.preventDefault();
+          const shown = eventsMenu.classList.toggle('visible');
+          eventsMenu.setAttribute('aria-hidden', !shown);
+          eventsLink.setAttribute('aria-expanded', shown);
+          const landing = document.querySelector('.landing-page');
+          if(shown){
+            // insert embed once
+            if(!eventsMenu.dataset.loaded){
+              eventsMenu.innerHTML = embedAnchor;
+              const s = document.createElement('script');
+              s.src = '//widget-app.songkick.com/injector/10068547';
+              eventsMenu.appendChild(s);
+              eventsMenu.dataset.loaded = '1';
+            }
+            const linkRect = eventsLink.getBoundingClientRect();
+            const landingRect = landing.getBoundingClientRect();
+            const top = linkRect.bottom - landingRect.top + 12;
+            eventsMenu.style.position = 'absolute';
+            eventsMenu.style.left = '50%';
+            eventsMenu.style.transform = 'translateX(-50%)';
+            eventsMenu.style.top = top + 'px';
+            // Use ResizeObserver to follow embed height changes and expand page fully
+            const extraBelow = 12;
+            if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
+            eventsObserver = new ResizeObserver(function(){
+              const h = eventsMenu.getBoundingClientRect().height;
+              const total = h + extraBelow;
+              landing.style.setProperty('--stream-shift', total + 'px');
+              setEmbedSpacer(total);
+              landing.classList.add('shifted');
+            });
+            // observe after a frame so embed has started rendering
+            requestAnimationFrame(function(){ eventsObserver.observe(eventsMenu); });
+          } else {
+            landing.classList.remove('shifted');
+            landing.style.removeProperty('--stream-shift');
+            eventsMenu.style.left = '';
+            eventsMenu.style.top = '';
+            eventsMenu.style.position = '';
+            eventsMenu.style.transform = '';
+            if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
+            removeEmbedSpacer();
+          }
+        }
+        eventsLink.addEventListener('click', toggleEvents);
+        document.addEventListener('click', function(e){
+          if(!eventsMenu.contains(e.target) && e.target !== eventsLink){
+            eventsMenu.classList.remove('visible');
+            eventsMenu.setAttribute('aria-hidden','true');
+            const landing = document.querySelector('.landing-page');
+            landing.classList.remove('shifted');
+            landing.style.removeProperty('--stream-shift');
+            eventsMenu.style.left = '';
+            eventsMenu.style.top = '';
+            eventsMenu.style.position = '';
+            eventsMenu.style.transform = '';
+            if(eventsObserver){ eventsObserver.disconnect(); eventsObserver = null; }
+            removeEmbedSpacer();
+          }
+        });
+      })();
+    </script>
+    </body>
+    </html>

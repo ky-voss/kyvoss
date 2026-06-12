@@ -3,10 +3,6 @@
   box-sizing: border-box;
 }
 
-.img {
-  align: center;
-}
-
 .landing-page {
   background: #ffffff;
   border-radius: 30px;
@@ -47,7 +43,7 @@
   left: 173px;
   top: 328px;
 }
-.shop-vinyl {
+.shop {
   color: #441444;
   text-align: center;
   font-family: "HammersmithOne-Regular", sans-serif;
@@ -107,8 +103,8 @@
 .embed-menu.visible{ display:block;}
 .embed-menu > .songkick-widget{ display:block; margin:0 auto;}
 
-/* When the stream menu is open, shift other elements down to avoid overlap */
-.landing-page.shifted > *:not(#stream-link):not(#stream-menu):not(#events-link):not(.download):not(.shop-vinyl):not(.logo):not(.image-logo) {
-  transform: translateY(var(--stream-shift,0));
-  transition: transform 180ms ease;
+/* When the stream menu is open, avoid shifting layout to prevent hiding elements.
+   The previous broad selector could move elements offscreen; keep layout stable. */
+.landing-page.shifted {
+  /* preserved for future use if needed */
 }
