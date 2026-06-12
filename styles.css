@@ -28,7 +28,8 @@
   width: 102px;
   height: 17px;
   position: absolute;
-  left: 154px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 258px;
   object-fit: cover;
   aspect-ratio: 102/17;
@@ -61,7 +62,8 @@
   width: 177px;
   height: 177px;
   position: absolute;
-  left: 117px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 62px;
   object-fit: cover;
   aspect-ratio: 1;
@@ -100,7 +102,7 @@
 }
 .link-menu ul{ list-style:none; margin:0; padding:0; display:flex; gap:18px; justify-content:center;}
 .link-menu li{ margin:0;}
-.link-menu a{ color:#441444; text-decoration:none; font-family:"HammersmithOne-Regular", sans-serif; font-size:12px; text-transform:uppercase;}
+.link-menu a{ color:#441444; text-decoration:none; font-family:"HammersmithOne-Regular", sans-serif; font-size:12px; text-transform:uppercase; display:inline-block; padding:8px 12px; border-radius:4px;}
 .menu-note{ margin:0; font-size:12px; color:#666;}
 
 /* Events embed container */
@@ -110,6 +112,15 @@
 
 /* When the stream menu is open, avoid shifting layout to prevent hiding elements.
    The previous broad selector could move elements offscreen; keep layout stable. */
-.landing-page.shifted {
-  /* preserved for future use if needed */
+
+/* Shift the following links downward when the stream/events embed is shown. */
+.landing-page.shifted .download,
+.landing-page.shifted .shop,
+.landing-page.shifted .events {
+  transform: translateY(var(--stream-shift));
+  transition: transform 180ms ease;
+}
+
+.landing-page.shifted .link-menu { /* keep the menu positioned where JS placed it */
+  transform: translateX(-50%);
 }
