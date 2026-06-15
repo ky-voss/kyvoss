@@ -130,3 +130,11 @@
 .landing-page.shifted .link-menu { /* keep the menu positioned where JS placed it */
   transform: translateX(-50%);
 }
+
+./* Global link hover: make all links (including toggles) light gray on hover/focus */
+a, a:visited { transition: color 160ms ease; }
+.landing-page a:hover, .link-menu a:hover, .embed-menu a:hover, a:hover,
+.landing-page a:focus, .link-menu a:focus, .embed-menu a:focus, a:focus {
+  color: #d3d3d3;
+  outline: none;
+}
